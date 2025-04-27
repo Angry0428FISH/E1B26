@@ -69,9 +69,44 @@ MENU:
 					printf("輸入錯誤!請輸入一個‘a’到‘n’的字元:"); //輸入錯誤，沒有顯示，原因: do-while迴圈內有 system("cls") 
             } while (!(ch >= 'a' && ch <= 'n'));
 
-            printf("\n按下任意建已回到主選單\n");
+            printf("按下任意建已回到主選單\n");
             getch();
 			system("CLS");
+            goto MENU;
+		}
+		
+	//04
+		case 'B':
+		case 'b':
+		{
+			int n;
+			system("cls");
+			printf("請輸入1到9之間的整數: ");
+            do
+            {  
+                
+                scanf("%d", &n);
+                if(n >= 1 && n <= 9)
+                {
+                    printf("乘法表(1~%d):\n", n);
+                    for(int i = 1; i <= n; i++)
+                    {
+                        for(int j = 1; j <= n; j++)
+                        {
+                            printf("%2d*%2d=%2d ", i, j, i*j); // 排版整齊輸出
+                        }
+                        printf("\n");
+                    }
+                }
+                else
+                {
+                    printf("輸入錯誤!請重新輸入:");
+                }
+            } while(!(n >= 1 && n <= 9));
+
+            printf("按下任意鍵返回主選單\n");
+            getch();
+            system("cls");
             goto MENU;
 		}
 	}
