@@ -5,6 +5,29 @@
 int main()
 {
 	//01
+	printf("************************************\n");
+	printf("         ☆\n");
+    printf("        /_\\\n");
+    printf("       /___\\\n");
+    printf("      /_*__*\\\n");
+    printf("     /___*___\\\n");
+    printf("    /_*___*__*\\\n");
+    printf("   /___*___*___\\\n");
+    printf("  /_*___*___*__*\\\n");
+    printf(" /___*___*___*___\\\n");
+    printf("        |||\n");
+    printf("        |||\n");
+    printf("        |||\n");
+    printf("        |||\n");
+    printf("       /|||\\\n");
+    printf("      /_|||_\\\n");
+    printf("     /__|||__\\\n");
+    printf("    /___|||___\\\n");
+    printf("   /____|||____\\\n");
+    printf("  /_____|||_____\\\n");
+    printf("        |||\n");
+	printf("************************************\n");
+ 
 	int i, pass;
 	printf("請輸入4個數字的密碼:");
 	scanf("%d",&pass);
@@ -46,7 +69,6 @@ MENU:
 			printf("輸入一個‘a’到‘n’的字元:");
             do 
 			{
-                
                 fflush(stdin);
                 scanf("%c", &ch);
 //三角形格式錯誤， 
@@ -84,7 +106,6 @@ MENU:
 			printf("請輸入1到9之間的整數: ");
             do
             {  
-                
                 scanf("%d", &n);
                 if(n >= 1 && n <= 9)
                 {
@@ -109,8 +130,34 @@ MENU:
             system("cls");
             goto MENU;
 		}
+	//05
+		case 'C':
+		case 'c':
+		{
+			char confirm;
+			printf("是否確定要結束？(y/n)：");
+			confirm = getch();
+			printf("%c\n", confirm);
+			do 
+			{
+			    if (confirm == 'n' || confirm == 'N')
+    			{
+        			printf("程式結束，掰掰！\n");
+        			return 0;
+    			}
+    			else if (confirm == 'y' || confirm == 'Y') 
+    			{
+        			system("cls");
+        			goto MENU;
+    			}
+    		else
+   			{
+        		printf("輸入錯誤！請重新輸入 (y/n)：");
+        		scanf(" %c", &confirm);
+    		}
+			} while (1);
+		}
 	}
-	
 	
 	return 0;
 }
