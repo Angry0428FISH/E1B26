@@ -248,6 +248,21 @@ int main()
             case 'c':
                 manualSelect();
                 break;
+            case 'd':
+                printf("Continue? (y/n): ");
+                scanf(" %c", &cont);
+                if (cont == 'y' || cont == 'Y')
+                    continue;
+                else if (cont == 'n' || cont == 'N') {
+                    printf("Exiting system.\n");
+                    return 0;
+                } else {
+                    printf("Invalid input.\n");
+                }
+                break;
+            default:
+                printf("Invalid selection.\n");
+                break;
         }
     }
 
