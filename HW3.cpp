@@ -6,6 +6,7 @@
 #define PASSWORD 2025
 #define ROWS 9
 #define COLS 9
+#define MAX_SEATS 4
 
 char seats[ROWS][COLS];
 void initSeats() 
@@ -135,6 +136,41 @@ void showMenu()
         printf("No available arrangement found. Returning to menu.\n");
     }
 }
+void manualSelect() 
+{
+    char input[10];
+    int selected[MAX_SEATS][2];
+    int count = 0;
+
+    while (count < MAX_SEATS) 
+	{
+        printf("Enter seat (e.g. 2-9 or q to quit): ");
+        scanf("%s", input);
+        if (strcmp(input, "q") == 0) break;
+
+        int col, row;
+        if (sscanf(input, "%d-%d", &col, &row) != 2 || col < 1 || col > 9 || row < 1 || row > 9) {
+            printf("Invalid input.\n");
+            continue;
+        }
+
+        int r = 9 - row;
+        int c = col - 1;
+        if (seats[r][c] != '-') {
+            printf("Seat already taken.\n");
+            continue;
+        }
+
+        seats[r][c] = '@';
+        selected[count][0] = r;
+        selected[count][1] = c;
+        count++;
+    }
+
+    displaySeats();
+    system("pause");
+	system("CLS");
+}
 
 int main() 
 {
@@ -168,20 +204,21 @@ int main()
 
     initSeats();
 
-    while (attempts < 3) {
-        printf("Enter 4-digit code: ");
-        scanf("%d", &inputPwd);
-        if (inputPwd == PASSWORD) 
-        printf("Incorrect code.\n");
-       	attempts++; 
-		break;
-        
-    }
-
-    if (attempts == 3) {
-        printf("Access denied.\n");
-        return 0;
-    }
+   int i, pass;
+	printf("請輸入4個數字的密碼:");
+	scanf("%d",&pass);
+	for(i=0;i<=3;i++)
+	{
+		
+		if(pass!=PASSWORD)
+		{
+			printf("輸入錯誤，請重新輸入:");
+			scanf("%d",&pass);
+			i++;
+		}
+		if(i==3 && pass!=PASSWORD) return 1;
+	}
+	printf("輸入正確\n");	
 	system("pause");
 	system("CLS");
 
@@ -208,6 +245,9 @@ int main()
                     printf("Invalid number of seats.\n");
                 break;
             }
+            case 'c':
+                manualSelect();
+                break;
         }
     }
 
