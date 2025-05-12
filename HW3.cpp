@@ -1,6 +1,41 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include <time.h>
 #define PASSWORD 2025
+#define ROWS 9
+#define COLS 9
+
+char seats[ROWS][COLS];
+void initSeats() 
+{
+	int i=0, j=0;
+    for (i = 0; i < ROWS; i++)
+        for (j = 0; j < COLS; j++)
+            seats[i][j] = '-';
+
+    srand(time(NULL));
+    int booked = 0;
+    while (booked < 10) {
+        int r = rand() % ROWS;
+        int c = rand() % COLS;
+        if (seats[r][c] == '-') {
+            seats[r][c] = '*';
+            booked++;
+        }
+    }
+}
+void displaySeats() 
+{
+    printf(" \\123456789\n");
+    int i=0, j=0;
+	for (i = 0; i < ROWS; i++) {
+        printf("%d ", 9 - i);
+        for (j = 0; j < COLS; j++) {
+            printf("%c", seats[i][j]);
+        }
+        printf("\n");
+    }
+}
 
 void showMenu()
  {
@@ -12,9 +47,9 @@ void showMenu()
 	printf("-----------------------------\n");
  }
  
-int main()
+int main() 
 {
-//01 顯示聖誕樹圖案
+//show Personal style image
 	printf("************************************\n");
 	printf("         ☆\n");
     printf("        /_\\\n");
@@ -38,31 +73,43 @@ int main()
     printf("        |||\n");
 	printf("************************************\n");
 	
-	// 密碼驗證，最多輸入3次 
-	int i, pass;
-	printf("請輸入4個數字的密碼:");
-	scanf("%d",&pass);
-	for(i=0;i<=3;i++)
-	{
-		
-		if(pass!=PASSWORD)
-		{
-			printf("輸入錯誤，請重新輸入:");
-			scanf("%d",&pass);
-			i++;
-		}
-		if(i==3 && pass!=PASSWORD) return 1;// 錯誤三次直接結束程式	
-	}
-	printf("輸入正確\n");	
+    int inputPwd, attempts = 0;
+    char option;
+    char cont;
+
+    initSeats();
+
+    while (attempts < 3) {
+        printf("Enter 4-digit code: ");
+        scanf("%d", &inputPwd);
+        if (inputPwd == PASSWORD) 
+        printf("Incorrect code.\n");
+       	attempts++; 
+		break;
+        
+    }
+
+    if (attempts == 3) {
+        printf("Access denied.\n");
+        return 0;
+    }
 	system("pause");
-	system("CLS");// 清除螢幕
-	
-//02顯示主選單 
-showMenu();
-	char choice;
-	printf("輸入選項:");
-	fflush(stdin); //清空輸入緩衝區，避免讀到 Enter。
-	scanf("%c",&choice);
-	
-	return 0;
+	system("CLS");
+
+    while (1) {
+        showMenu();
+        printf("Select an option (a/b/c/d): ");
+        scanf(" %c", &option);
+
+        switch (option) {
+            case 'a':
+                displaySeats();
+                printf("Press any key to return to menu...\n");
+                getchar(); getchar(); 
+                system("clear||cls");
+                break;
+        }
+    }
+
+    return 0;
 }
