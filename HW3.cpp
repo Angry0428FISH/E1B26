@@ -1,6 +1,8 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include <time.h>
+#include <string.h>
+
 #define PASSWORD 2025
 #define ROWS 9
 #define COLS 9
@@ -47,6 +49,93 @@ void showMenu()
 	printf("-----------------------------\n");
  }
  
+ void autoArrange(int count) 
+{
+    int tempSeats[ROWS][COLS];
+    memcpy(tempSeats, seats, sizeof(tempSeats));
+    int found = 0;
+
+    srand(time(NULL));
+    if (count >= 1 && count <= 3) {
+    	int attempt;
+        for (attempt = 0; attempt < 1000 && !found; attempt++) {
+            int row = rand() % ROWS;
+            int col = rand() % (COLS - count + 1);
+            int ok = 1;
+            int k=0;
+            for (k = 0; k < count; k++) {
+                if (seats[row][col + k] != '-') {
+                    ok = 0;
+                    break;
+                }
+            }
+            if (ok) {
+                for (k = 0; k < count; k++) {
+                    tempSeats[row][col + k] = '@';
+                }
+                found = 1;
+            }
+        }
+    } else if (count == 4) {
+    	int i=0, j=0, k=0;
+        for (i = 0; i < ROWS && !found; i++) {
+            for (j = 0; j <= COLS - 4; j++) {
+                int ok = 1;
+                for (k = 0; k < 4; k++) {
+                    if (seats[i][j + k] != '-') {
+                        ok = 0;
+                        break;
+                    }
+                }
+                if (ok) {
+                    for (k = 0; k < 4; k++) {
+                        tempSeats[i][j + k] = '@';
+                    }
+                    found = 1;
+                }
+            }
+        }
+
+        if (!found) {
+            for (i = 0; i < ROWS - 1 && !found; i++) {
+                for (j = 0; j <= COLS - 2; j++) {
+                    if (seats[i][j] == '-' && seats[i][j+1] == '-' &&
+                        seats[i+1][j] == '-' && seats[i+1][j+1] == '-') {
+                        tempSeats[i][j] = tempSeats[i][j+1] = '@';
+                        tempSeats[i+1][j] = tempSeats[i+1][j+1] = '@';
+                        found = 1;
+                    }
+                }
+            }
+        }
+    }
+
+    if (found) {
+        printf("Suggested seats:\n");
+        printf(" \\123456789\n");
+        int i=0, j=0;
+        for (i = 0; i < ROWS; i++) {
+            printf("%d ", 9 - i);
+            for (j = 0; j < COLS; j++) {
+                printf("%c", tempSeats[i][j]);
+            }
+            printf("\n");
+        }
+        char confirm;
+        printf("Are you satisfied with these seats? (y/n): ");
+        scanf(" %c", &confirm);
+        if (confirm == 'y' || confirm == 'Y') {
+            for (i = 0; i < ROWS; i++)
+                for (j = 0; j < COLS; j++)
+                    if (tempSeats[i][j] == '@')
+                        seats[i][j] = '*';
+            system("clear||cls");
+        }
+    } else {
+        printf("No available arrangement found. Returning to menu.\n");
+    }
+}
+
 int main() 
 {
 //show Personal style image
@@ -108,6 +197,17 @@ int main()
                 getchar(); getchar(); 
                 system("clear||cls");
                 break;
+            case 'b': 
+			{
+                int n;
+                printf("How many seats do you need (1~4)? ");
+                scanf("%d", &n);
+                if (n >= 1 && n <= 4)
+                    autoArrange(n);
+                else
+                    printf("Invalid number of seats.\n");
+                break;
+            }
         }
     }
 
