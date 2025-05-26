@@ -78,6 +78,29 @@ void inputValidScore(const char* subject, int* score) {
         }
     }
 }
+void enterGrades() {
+    printf("Enter number of students (5 to 10): ");
+    scanf("%d", &n);
+    while (n < 5 || n > 10) {
+        printf("Invalid number! Please enter a value between 5 and 10: ");
+        scanf("%d", &n);
+    }
+
+    for (int i = 0; i < n; i++) {
+        printf("\n--- Student %d ---\n", i + 1);
+        inputValidID(students[i].id, i);
+
+        printf("Enter name: ");
+        scanf("%s", students[i].name);
+
+        inputValidScore("Math", &students[i].math);
+        inputValidScore("Physics", &students[i].physics);
+        inputValidScore("English", &students[i].english);
+
+        students[i].average = (students[i].math + students[i].physics + students[i].english) / 3.0;
+    }
+    printf("\nData entry complete.\n");
+}
 int main() {
     char option;
     char confirm;
@@ -116,9 +139,9 @@ int main() {
     		switch (option) 
 			{
         		case 'a': enterGrades(); break;
-        		case 'b': displayGrades(); break;
-        		case 'c': searchGrades(); break;
-        		case 'd': gradeRanking(); break;
+        		case 'b': //displayGrades(); break;
+        		case 'c': //searchGrades(); break;
+        		case 'd': //gradeRanking(); break;
         		case 'e':
             		printf("Are you sure you want to exit? (y/n): ");
             		scanf(" %c", &confirm);
