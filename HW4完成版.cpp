@@ -101,6 +101,22 @@ void enterGrades() {
     }
     printf("\nData entry complete.\n");
 }
+void displayGrades() {
+    if (n == 0) {
+        printf("No student data available. Please enter data first.\n");
+    } else {
+        printf("\n%-8s %-10s %-6s %-8s %-8s %-8s\n", "ID", "Name", "Math", "Physics", "English", "Average");
+        for (int i = 0; i < n; i++) {
+            printf("%-8s %-10s %-6d %-8d %-8d %-8.2f\n",
+                   students[i].id, students[i].name, students[i].math,
+                   students[i].physics, students[i].english, students[i].average);
+        }
+    }
+    printf("\nPress any key to return to main menu...");
+	getch();
+	system("CLS");
+
+}
 int main() {
     char option;
     char confirm;
@@ -139,7 +155,7 @@ int main() {
     		switch (option) 
 			{
         		case 'a': enterGrades(); break;
-        		case 'b': //displayGrades(); break;
+        		case 'b': displayGrades(); break;
         		case 'c': //searchGrades(); break;
         		case 'd': //gradeRanking(); break;
         		case 'e':
