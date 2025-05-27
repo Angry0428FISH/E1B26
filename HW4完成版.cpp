@@ -117,6 +117,32 @@ void displayGrades() {
 	system("CLS");
 
 }
+void searchGrades() {
+    if (n == 0) {
+        printf("No student data available. Please enter data first.\n");
+    } else {
+        char targetName[20];
+        printf("Enter student name to search: ");
+        scanf("%19s", targetName);
+        int found = 0;
+        for (int i = 0; i < n; i++) {
+            if (strcmp(students[i].name, targetName) == 0) {
+                printf("Found %s (ID: %s): Math=%d, Physics=%d, English=%d, Average=%.2f\n",
+                       students[i].name, students[i].id, students[i].math,
+                       students[i].physics, students[i].english, students[i].average);
+                found = 1;
+                break;
+            }
+        }
+        if (!found) {
+            printf("Student name %s not found.\n", targetName);
+        }
+    }
+    printf("\nPress any key to return to main menu...");
+    getch();
+    system("CLS");
+}
+
 int main() {
     char option;
     char confirm;
@@ -156,7 +182,7 @@ int main() {
 			{
         		case 'a': enterGrades(); break;
         		case 'b': displayGrades(); break;
-        		case 'c': //searchGrades(); break;
+        		case 'c': searchGrades(); break;
         		case 'd': //gradeRanking(); break;
         		case 'e':
             		printf("Are you sure you want to exit? (y/n): ");
