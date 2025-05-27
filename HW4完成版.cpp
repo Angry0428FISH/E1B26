@@ -1,8 +1,12 @@
-#include <stdio.h>
-#include <stdlib.h>
-#define PASSWORD 2025
-#include <string.h>
-#include <ctype.h>
+#include <stdio.h>		// 基本輸入輸出功能
+#include <stdlib.h>		// 提供 system() 函式使用（清除畫面、暫停等
+#include <string.h>		// 提供字串處理功能，如 strcmp()
+#include <ctype.h>		// 提供 isdigit() 用於判斷是否為數字（密碼檢查、學號驗證）
+
+#define PASSWORD 2025	// 定義登入密碼常數
+#define MAX 10			// 最多學生數量
+
+// 處理 getch()，根據不同作業系統定義
 #ifdef _WIN32
 #include <conio.h>
 #else
@@ -21,20 +25,20 @@ char getch() {
 }
 #endif
 
-#define MAX 10
-
+// 學生資料結構
 typedef struct {
-    char id[7];           // 學號 (6位數，字串)
-    char name[20];        // 姓名
+    char id[7];         // 學號 (6位數，字串)
+    char name[20];      // 姓名
     int math;
     int physics;
     int english;
-    float average;
+    float average;		// 平均成績
 } Student;
 
-Student students[MAX];
-int n = 0;
+Student students[MAX];	// 存放學生陣列
+int n = 0;				// 實際學生人數
 
+// 驗證學生 ID 格式與唯一性
 void inputValidID(char *idBuffer, int index) 
 {
     while (1) {
@@ -67,6 +71,7 @@ void inputValidID(char *idBuffer, int index)
     }
 }
 
+// 驗證單一科目分數輸入
 void inputValidScore(const char* subject, int* score) {
     while (1) {
         printf("Enter %s grade (0-100): ", subject);
@@ -78,6 +83,8 @@ void inputValidScore(const char* subject, int* score) {
         }
     }
 }
+
+// 輸入所有學生成績資料
 void enterGrades() {
     printf("Enter number of students (5 to 10): ");
     scanf("%d", &n);
@@ -101,6 +108,8 @@ void enterGrades() {
     }
     printf("\nData entry complete.\n");
 }
+
+// 顯示所有學生資料
 void displayGrades() {
     if (n == 0) {
         printf("No student data available. Please enter data first.\n");
@@ -117,6 +126,8 @@ void displayGrades() {
 	system("CLS");
 
 }
+
+// 依學生姓名查詢成績
 void searchGrades() {
     if (n == 0) {
         printf("No student data available. Please enter data first.\n");
@@ -143,11 +154,43 @@ void searchGrades() {
     system("CLS");
 }
 
+// 根據平均成績進行降序排序並顯示排名
+void gradeRanking() {
+    if (n == 0) {
+        printf("No student data available. Please enter data first.\n");
+    } else {
+        // 使用 Bubble Sort 排序學生資料
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - i - 1; j++) {
+                if (students[j].average < students[j + 1].average) {
+                    Student temp = students[j];
+                    students[j] = students[j + 1];
+                    students[j + 1] = temp;
+                }
+            }
+        }
+
+        // 顯示排名
+        printf("\n--- Grade Ranking ---\n");
+        printf("%-8s %-10s %-8s\n", "ID", "Name", "Average");
+        for (int i = 0; i < n; i++) {
+            printf("%-8s %-10s %-8.2f\n",
+                   students[i].id, students[i].name, students[i].average);
+        }
+    }
+
+    printf("\nPress any key to return to main menu...");
+    getch();
+    system("CLS");
+}
+
+
 int main() {
     char option;
     char confirm;
     int input;
     
+    // 顯示星星圖案作為歡迎畫面
 	for (int i = 1; i <= 20; i++) 
 	{
         for (int j = 1; j <= i; j++) 
@@ -156,6 +199,8 @@ int main() {
         }
         printf("\n");
     }
+    
+    // 登入驗證：最多三次機會
     for (int attempt = 1; attempt <= 3; attempt++) 
     {
         printf("請輸入密碼：");
@@ -167,23 +212,24 @@ int main() {
 			system("CLS");
     		while(1)
 			{
-    		printf("----- [Grade System] ------\n");
-    		printf("a. Enter student grades\n");
-    		printf("b. Display student grades\n");
-    		printf("c. Search for student grades\n");
-    		printf("d. Grade ranking\n");
-    		printf("e. Exit system\n");
-    		printf("---------------------------\n");
-    		printf("Enter your choice: ");
-    		scanf(" %c", &option);
-    		system("CLS");
+				// 主選單
+    			printf("----- [Grade System] ------\n");
+    			printf("a. Enter student grades\n");
+    			printf("b. Display student grades\n");
+    			printf("c. Search for student grades\n");
+    			printf("d. Grade ranking\n");
+    			printf("e. Exit system\n");
+    			printf("---------------------------\n");
+    			printf("Enter your choice: ");
+    			scanf(" %c", &option);
+    			system("CLS");
 
     		switch (option) 
 			{
         		case 'a': enterGrades(); break;
         		case 'b': displayGrades(); break;
         		case 'c': searchGrades(); break;
-        		case 'd': //gradeRanking(); break;
+        		case 'd': gradeRanking(); break;
         		case 'e':
             		printf("Are you sure you want to exit? (y/n): ");
             		scanf(" %c", &confirm);
@@ -209,3 +255,12 @@ int main() {
 	printf("錯誤次數過多，已鎖定。\n");
     return 0;
 }
+
+/*
+說明與心得：
+本程式是一個簡易的學生成績系統，提供使用者輸入、查詢、排序學生成績的功能。
+開頭使用密碼登入保護，避免非授權者操作。資料結構使用 struct 儲存每位學生的資訊，並透過 array 管理。
+我學到了使用字串檢查、數字驗證與基本資料排序，並熟悉了如何在 C 語言中結合多個函式來完成一個完整系統。
+另外我也作了 getch() 以在 Windows/Linux 都能操作暫停與畫面清除。
+未來可擴充功能如資料儲存至檔案、允許修改與刪除等。
+*/
